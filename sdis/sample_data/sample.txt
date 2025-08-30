@@ -1,0 +1,2 @@
+This is a sample text file for SDIS ingestion tests.
+It contains an email: dev@example.com
