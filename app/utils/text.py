@@ -1,7 +1,7 @@
 # app/utils/text.py
 import re
 import unicodedata
-from typing import str
+from typing import Any, Dict, List
 
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace and newlines in text"""
