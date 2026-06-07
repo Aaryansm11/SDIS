@@ -130,7 +130,7 @@ class TextRedactor:
                 'original_start': start,
                 'original_end': end,
                 'original_text': original_text,
-                'replacement': replacement,
+                'replacement': replacement, 'redacted_text': replacement,
                 'type': span['type'],
                 'mode': mode,
                 'confidence': span['confidence']
