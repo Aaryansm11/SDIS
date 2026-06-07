@@ -27,6 +27,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-asyncio
       - name: Download spaCy model
-        run: python -m spacy download en_core_web_sm
+        run: pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
       - name: Run unit tests
         run: pytest tests/unit -v
