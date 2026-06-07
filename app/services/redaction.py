@@ -13,7 +13,7 @@ class PIIDetector:
     def __init__(self):
         self.patterns = {
             'ssn': re.compile(r'\b\d{3}-?\d{2}-?\d{4}\b'),
-            'phone': re.compile(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b'),
+            'phone': re.compile(r'\+?\d{0,2}[-.\s]?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}'),
             'email': re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'),
             'credit_card': re.compile(r'\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b'),
             'date_of_birth': re.compile(r'\b\d{1,2}[/-]\d{1,2}[/-]\d{2,4}\b'),
@@ -35,7 +35,7 @@ class PIIDetector:
         for pii_type, pattern in self.patterns.items():
             for match in pattern.finditer(text):
                 spans.append({
-                    'type': pii_type,
+                    'type': pii_type.upper(),
                     'start': match.start(),
                     'end': match.end(),
                     'text': match.group(),
@@ -49,7 +49,7 @@ class PIIDetector:
             for ent in doc.ents:
                 if ent.label_ in ['PERSON', 'ORG', 'GPE', 'DATE', 'MONEY']:
                     spans.append({
-                        'type': ent.label_.lower(),
+                        'type': ent.label_,
                         'start': ent.start_char,
                         'end': ent.end_char,
                         'text': ent.text,
@@ -151,7 +151,7 @@ class TextRedactor:
             'zip_code': '[ZIP]'
         }
         
-        return type_labels.get(pii_type, '[PII]')
+        return type_labels.get(pii_type.lower(), '[PII]')
     
     def _hash_text(self, text: str, pii_type: str) -> str:
         """Create deterministic hash replacement for PII"""
@@ -170,7 +170,7 @@ class TextRedactor:
             'zip_code': 'ZIP'
         }
         
-        prefix = type_prefixes.get(pii_type, 'PII')
+        prefix = type_prefixes.get(pii_type.lower(), 'PII')
         return f"[{prefix}:{hash_digest}]"
 
 # Service functions for dependency injection
